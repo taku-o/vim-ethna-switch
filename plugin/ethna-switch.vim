@@ -206,7 +206,7 @@ function! s:ETTemplate()
     endif
 endfunction
 
-function! ETInsertActionDir()
+function! s:ETInsertActionDir()
     if s:IsETAction()
         return s:GetETActionDirFromAction()
     elseif s:IsETView()
@@ -218,7 +218,7 @@ function! ETInsertActionDir()
     endif
 endfunction
 
-function! ETInsertViewDir()
+function! s:ETInsertViewDir()
     if s:IsETAction()
         return s:GetETViewDirFromAction()
     elseif s:IsETView()
@@ -230,7 +230,7 @@ function! ETInsertViewDir()
     endif
 endfunction
 
-function! ETInsertTemplateDir()
+function! s:ETInsertTemplateDir()
     if s:IsETAction()
         return s:GetETTemplateDirFromAction()
     elseif s:IsETView()
