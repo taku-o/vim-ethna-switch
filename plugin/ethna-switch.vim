@@ -9,8 +9,8 @@ set cpo&vim
 " ---------------------------------------------------------------------
 
 function! s:FullPath()
-    "return expand('%:p')
-    return '/home/gree/frontend/tgames/act/Portal/Myapp/Invite/Setting.php'
+    return expand('%:p')
+    "return '/home/gree/frontend/tgames/act/Portal/Myapp/Invite/Setting.php'
 endfunction
 
 function! s:IsETAction()
