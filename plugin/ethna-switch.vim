@@ -8,8 +8,12 @@ let s:keepcpo = &cpo
 set cpo&vim
 " ---------------------------------------------------------------------
 
+function! s:FullPath()
+    return expand('%:p')
+endfunction
+
 function! s:IsETAction()
-    if (matchstr(expand('%:p'), '/act/\(.\{-\}/\)\{-\}.\{-\}\.php5\?$') != '')
+    if (matchstr(s:FullPath(), '/act/\(.\{-\}/\)\{-\}.\{-\}\.php5\?$') != '')
         return 1
     else
         return 0
@@ -17,7 +21,7 @@ function! s:IsETAction()
 endfunction
 
 function! s:IsETView()
-    if (matchstr(expand('%:p'), '/view/\(.\{-\}/\)\{-\}.\{-\}\.php5\?$') != '')
+    if (matchstr(s:FullPath(), '/view/\(.\{-\}/\)\{-\}.\{-\}\.php5\?$') != '')
         return 1
     else
         return 0
@@ -25,7 +29,7 @@ function! s:IsETView()
 endfunction
 
 function! s:IsETTemplate()
-    if (matchstr(expand('%:p'), '/tpl/\(.\{-\}/\)\{-\}.\{-\}\.tpl$') != '')
+    if (matchstr(s:FullPath(), '/tpl/\(.\{-\}/\)\{-\}.\{-\}\.tpl$') != '')
         return 1
     else
         return 0
@@ -33,56 +37,128 @@ function! s:IsETTemplate()
 endfunction
 
 function! s:GetETActionPathFromView()
-    let root  = substitute(expand('%:p'), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
-    let dir   = substitute(expand('%:p'), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
-    let fname = substitute(expand('%:p'), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\4', '')
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+    let l:fname = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\4', '')
 
-    let a = root. '/act/'. dir. fname
+    let a = l:root. '/act/'. l:dir. l:fname
     return a
 endfunction
 
 function! s:GetETActionPathFromTemplate()
-    let root  = substitute(expand('%:p'), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\1', '')
-    let dir   = substitute(expand('%:p'), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\2', '')
-    let fname = substitute(expand('%:p'), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\4', '')
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\2', '')
+    let l:fname = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\4', '')
 
-    let a = root. '/act/'. substitute(substitute(dir, '.*', '\u\0', ''), '/\(.\)', '/\u\1', 'g'). substitute(fname, '\(\zs\)\(.*\)\(.tpl\)', '\u\1\2.php', '')
+    let a = l:root. '/act/'. substitute(substitute(l:dir, '.*', '\u\0', ''), '/\(.\)', '/\u\1', 'g'). substitute(l:fname, '\(\zs\)\(.*\)\(.tpl\)', '\u\1\2.php', '')
     return a
 endfunction
 
 function! s:GetETViewPathFromAction()
-    let root  = substitute(expand('%:p'), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
-    let dir   = substitute(expand('%:p'), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
-    let fname = substitute(expand('%:p'), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\4', '')
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+    let l:fname = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\4', '')
 
-    let a = root. '/view/'. dir. fname
+    let a = l:root. '/view/'. l:dir. l:fname
     return a
 endfunction
 
 function! s:GetETViewPathFromTemplate()
-    let root  = substitute(expand('%:p'), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\1', '')
-    let dir   = substitute(expand('%:p'), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\2', '')
-    let fname = substitute(expand('%:p'), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\4', '')
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\2', '')
+    let l:fname = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\4', '')
 
-    let a = root. '/view/'. substitute(substitute(dir, '.*', '\u\0', ''), '/\(.\)', '/\u\1', 'g'). substitute(fname, '\(\zs\)\(.*\)\(.tpl\)', '\u\1\2.php', '')
+    let a = l:root. '/view/'. substitute(substitute(l:dir, '.*', '\u\0', ''), '/\(.\)', '/\u\1', 'g'). substitute(l:fname, '\(\zs\)\(.*\)\(.tpl\)', '\u\1\2.php', '')
     return a
 endfunction
 
 function! s:GetETTemplatePathFromAction()
-    let root  = substitute(expand('%:p'), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
-    let dir   = substitute(expand('%:p'), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
-    let fname = substitute(expand('%:p'), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\4', '')
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+    let l:fname = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\4', '')
 
-    let a = root. '/tpl/'. tolower(dir). substitute(tolower(fname), '.php5\?', '.tpl', '')
+    let a = l:root. '/tpl/'. tolower(l:dir). substitute(tolower(l:fname), '.php5\?', '.tpl', '')
     return a
 endfunction
 
 function! s:GetETTemplatePathFromView()
-    let root  = substitute(expand('%:p'), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
-    let dir   = substitute(expand('%:p'), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
-    let fname = substitute(expand('%:p'), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\4', '')
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+    let l:fname = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\4', '')
 
-    let a = root. '/tpl/'. tolower(dir). substitute(tolower(fname), '.php5\?', '.tpl', '')
+    let a = l:root. '/tpl/'. tolower(l:dir). substitute(tolower(l:fname), '.php5\?', '.tpl', '')
+    return a
+endfunction
+
+function! s:GetETActionDirFromAction()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+
+    let a = l:root. '/act/'. l:dir
+    return a
+endfunction
+
+function! s:GetETActionDirFromView()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+
+    let a = l:root. '/act/'. l:dir
+    return a
+endfunction
+
+function! s:GetETActionDirFromTemplate()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\2', '')
+
+    let a = l:root. '/act/'. substitute(substitute(l:dir, '.*', '\u\0', ''), '/\(.\)', '/\u\1', 'g')
+    return a
+endfunction
+
+function! s:GetETViewDirFromAction()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+
+    let a = l:root. '/view/'. l:dir
+    return a
+endfunction
+
+function! s:GetETViewDirFromView()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+
+    let a = l:root. '/view/'. l:dir
+    return a
+endfunction
+
+function! s:GetETViewDirFromTemplate()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\2', '')
+
+    let a = l:root. '/view/'. substitute(substitute(l:dir, '.*', '\u\0', ''), '/\(.\)', '/\u\1', 'g')
+    return a
+endfunction
+
+function! s:GetETTemplateDirFromAction()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/act/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+
+    let a = l:root. '/tpl/'. tolower(l:dir)
+    return a
+endfunction
+
+function! s:GetETTemplateDirFromView()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/view/\(\(.\{-\}/\)*\)\(.\{-\}\.php5\?\)$', '\2', '')
+
+    let a = l:root. '/tpl/'. tolower(l:dir)
+    return a
+endfunction
+
+function! s:GetETTemplateDirFromTemplate()
+    let l:root  = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\1', '')
+    let l:dir   = substitute(s:FullPath(), '^\(.*\)/tpl/\(\(.\{-\}/\)*\)\(.\{-\}\.tpl\)$', '\2', '')
+
+    let a = l:root. '/tpl/'. tolower(l:dir)
     return a
 endfunction
 
@@ -130,9 +206,49 @@ function! s:ETTemplate()
     endif
 endfunction
 
+function! ETInsertActionDir()
+    if s:IsETAction()
+        return s:GetETActionDirFromAction()
+    elseif s:IsETView()
+        return s:GetETActionDirFromView()
+    elseif s:IsETTemplate()
+        return s:GetETActionDirFromTemplate()
+    else
+        return
+    endif
+endfunction
+
+function! ETInsertViewDir()
+    if s:IsETAction()
+        return s:GetETViewDirFromAction()
+    elseif s:IsETView()
+        return s:GetETViewDirFromView()
+    elseif s:IsETTemplate()
+        return s:GetETViewDirFromTemplate()
+    else
+        return
+    endif
+endfunction
+
+function! ETInsertTemplateDir()
+    if s:IsETAction()
+        return s:GetETTemplateDirFromAction()
+    elseif s:IsETView()
+        return s:GetETTemplateDirFromView()
+    elseif s:IsETTemplate()
+        return s:GetETTemplateDirFromTemplate()
+    else
+        return
+    endif
+endfunction
+
 command! -nargs=0 ETAction   call s:ETAction()
 command! -nargs=0 ETView     call s:ETView()
 command! -nargs=0 ETTemplate call s:ETTemplate()
+
+cmap <C-X><C-A> <C-\>e<SID>ETInsertActionDir()<CR>
+cmap <C-X><C-V> <C-\>e<SID>ETInsertViewDir()<CR>
+cmap <C-X><C-T> <C-\>e<SID>ETInsertTemplateDir()<CR>
 
 " ---------------------------------------------------------------------
 let &cpo= s:keepcpo
