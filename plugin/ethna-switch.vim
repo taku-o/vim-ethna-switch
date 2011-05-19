@@ -171,20 +171,29 @@ function! s:GetPHPFileName(path)
     endif
 endfunction
 
+function! s:IsDirectory(path)
+    let l:path = substitute(a:path, '/$', '', '')
+    if isdirectory(l:path)
+        return 1
+    else
+        return 0
+    endif
+endfunction
+
 function! s:ETAction()
     if s:IsETAction()
         return
     elseif s:IsETView()
-        if isdirectory(s:GetETActionDirFromView())
+        if s:IsDirectory(s:GetETActionDirFromView())
             execute ':e '. s:GetPHPFileName(s:GetETActionPathFromView())
         else
-            echohl WarningMsg | echo 'directory '. s:GetETActionDirFromView(). 'is not found.' | echohl None
+            echohl WarningMsg | echo 'directory '. s:GetETActionDirFromView(). ' is not found.' | echohl None
         endif
     elseif s:IsETTemplate()
-        if isdirectory(s:GetETActionDirFromTemplate())
+        if s:IsDirectory(s:GetETActionDirFromTemplate())
             execute ':e '. s:GetPHPFileName(s:GetETActionPathFromTemplate())
         else
-            echohl WarningMsg | echo 'directory '. s:GetETActionDirFromTemplate(). 'is not found.' | echohl None
+            echohl WarningMsg | echo 'directory '. s:GetETActionDirFromTemplate(). ' is not found.' | echohl None
         endif
     else
         return
@@ -193,18 +202,18 @@ endfunction
 
 function! s:ETView()
     if s:IsETAction()
-        if isdirectory(s:GetETViewPathFromAction())
+        if s:IsDirectory(s:GetETViewDirFromAction())
             execute ':e '. s:GetPHPFileName(s:GetETViewPathFromAction())
         else
-            echohl WarningMsg | echo 'directory '. s:GetETViewDirFromAction(). 'is not found.' | echohl None
+            echohl WarningMsg | echo 'directory '. s:GetETViewDirFromAction(). ' is not found.' | echohl None
         endif
     elseif s:IsETView()
         return
     elseif s:IsETTemplate()
-        if isdirectory(s:GetETViewPathFromTemplate())
+        if s:IsDirectory(s:GetETViewDirFromTemplate())
             execute ':e '. s:GetPHPFileName(s:GetETViewPathFromTemplate())
         else
-            echohl WarningMsg | echo 'directory '. s:GetETViewDirFromTemplate(). 'is not found.' | echohl None
+            echohl WarningMsg | echo 'directory '. s:GetETViewDirFromTemplate(). ' is not found.' | echohl None
         endif
     else
         return
@@ -213,16 +222,16 @@ endfunction
 
 function! s:ETTemplate()
     if s:IsETAction()
-        if isdirectory(s:GetETTemplateDirFromAction())
+        if s:IsDirectory(s:GetETTemplateDirFromAction())
             execute ':e '. s:GetETTemplatePathFromAction()
         else
-            echohl WarningMsg | echo 'directory '. s:GetETTemplateDirFromAction(). 'is not found.' | echohl None
+            echohl WarningMsg | echo 'directory '. s:GetETTemplateDirFromAction(). ' is not found.' | echohl None
         endif
     elseif s:IsETView()
-        if isdirectory(s:GetETTemplateDirFromView())
+        if s:IsDirectory(s:GetETTemplateDirFromView())
             execute ':e '. s:GetETTemplatePathFromView()
         else
-            echohl WarningMsg | echo 'directory '. s:GetETTemplateDirFromView(). 'is not found.' | echohl None
+            echohl WarningMsg | echo 'directory '. s:GetETTemplateDirFromView(). ' is not found.' | echohl None
         endif
     elseif s:IsETTemplate()
         return
