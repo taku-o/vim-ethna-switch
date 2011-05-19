@@ -10,6 +10,7 @@ set cpo&vim
 
 function! s:FullPath()
     return expand('%:p')
+    "return '/home/gree/frontend/tgames/act/Portal/Myapp/Invite/Setting.php'
 endfunction
 
 function! s:IsETAction()
@@ -206,49 +207,56 @@ function! s:ETTemplate()
     endif
 endfunction
 
-function! s:ETInsertActionDir()
+function! s:ReplacedCmd(path)
+    let l:loc = strpart(getcmdline(), 0, getcmdpos() - 1)
+    let l:roc = strpart(getcmdline(), getcmdpos() - 1)
+    call setcmdpos(strlen(l:loc) + strlen(a:path) + 1)
+    return l:loc. a:path. l:roc
+endfunction
+
+function! s:InsertETActionDir()
     if s:IsETAction()
-        return s:GetETActionDirFromAction()
+        return s:ReplacedCmd(s:GetETActionDirFromAction())
     elseif s:IsETView()
-        return s:GetETActionDirFromView()
+        return s:ReplacedCmd(s:GetETActionDirFromView())
     elseif s:IsETTemplate()
-        return s:GetETActionDirFromTemplate()
+        return s:ReplacedCmd(s:GetETActionDirFromTemplate())
     else
-        return
+        return getcmdline()
     endif
 endfunction
 
-function! s:ETInsertViewDir()
+function! s:InsertETViewDir()
     if s:IsETAction()
-        return s:GetETViewDirFromAction()
+        return s:ReplacedCmd(s:GetETViewDirFromAction())
     elseif s:IsETView()
-        return s:GetETViewDirFromView()
+        return s:ReplacedCmd(s:GetETViewDirFromView())
     elseif s:IsETTemplate()
-        return s:GetETViewDirFromTemplate()
+        return s:ReplacedCmd(s:GetETViewDirFromTemplate())
     else
-        return
+        return getcmdline()
     endif
 endfunction
 
-function! s:ETInsertTemplateDir()
+function! s:InsertETTemplateDir()
     if s:IsETAction()
-        return s:GetETTemplateDirFromAction()
+        return s:ReplacedCmd(s:GetETTemplateDirFromAction())
     elseif s:IsETView()
-        return s:GetETTemplateDirFromView()
+        return s:ReplacedCmd(s:GetETTemplateDirFromView())
     elseif s:IsETTemplate()
-        return s:GetETTemplateDirFromTemplate()
+        return s:ReplacedCmd(s:GetETTemplateDirFromTemplate())
     else
-        return
+        return getcmdline()
     endif
 endfunction
 
-command! -nargs=0 ETAction   call s:ETAction()
-command! -nargs=0 ETView     call s:ETView()
-command! -nargs=0 ETTemplate call s:ETTemplate()
+command! -nargs=0 ETAction   call <SID>ETAction()
+command! -nargs=0 ETView     call <SID>ETView()
+command! -nargs=0 ETTemplate call <SID>ETTemplate()
 
-cmap <C-X><C-A> <C-\>e<SID>ETInsertActionDir()<CR>
-cmap <C-X><C-V> <C-\>e<SID>ETInsertViewDir()<CR>
-cmap <C-X><C-T> <C-\>e<SID>ETInsertTemplateDir()<CR>
+cmap <C-X><C-A> <C-\>e<SID>InsertETActionDir()<CR>
+cmap <C-X><C-V> <C-\>e<SID>InsertETViewDir()<CR>
+cmap <C-X><C-T> <C-\>e<SID>InsertETTemplateDir()<CR>
 
 " ---------------------------------------------------------------------
 let &cpo= s:keepcpo
