@@ -86,13 +86,21 @@ function! s:GetETTemplatePathFromView()
     return a
 endfunction
 
+function! s:GetPHPFileName(path)
+    if filereadable(a:path. '5')
+        return a:path. '5'
+    else
+        return a:path
+    endif
+endfunction
+
 function! s:ETAction()
     if s:IsETAction()
         return
     elseif s:IsETView()
-        execute ':e '. s:GetETActionPathFromView()
+        execute ':e '. s:GetPHPFileName(s:GetETActionPathFromView())
     elseif s:IsETTemplate()
-        execute ':e '. s:GetETActionPathFromTemplate()
+        execute ':e '. s:GetPHPFileName(s:GetETActionPathFromTemplate())
     else
         return
     endif
@@ -100,11 +108,11 @@ endfunction
 
 function! s:ETView()
     if s:IsETAction()
-        execute ':e '. s:GetETViewPathFromAction()
+        execute ':e '. s:GetPHPFileName(s:GetETViewPathFromAction())
     elseif s:IsETView()
         return
     elseif s:IsETTemplate()
-        execute ':e '. s:GetETViewPathFromTemplate()
+        execute ':e '. s:GetPHPFileName(s:GetETViewPathFromTemplate())
     else
         return
     endif
