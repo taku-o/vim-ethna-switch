@@ -9,8 +9,8 @@ set cpo&vim
 " ---------------------------------------------------------------------
 
 function! s:FullPath()
-    return expand('%:p')
-    "return '/home/gree/frontend/tgames/act/Portal/Myapp/Invite/Setting.php'
+    "return expand('%:p')
+    return '/home/gree/frontend/tgames/act/Portal/Myapp/Invite/Setting.php'
 endfunction
 
 function! s:IsETAction()
@@ -175,9 +175,17 @@ function! s:ETAction()
     if s:IsETAction()
         return
     elseif s:IsETView()
-        execute ':e '. s:GetPHPFileName(s:GetETActionPathFromView())
+        if isdirectory(s:GetETActionDirFromView())
+            execute ':e '. s:GetPHPFileName(s:GetETActionPathFromView())
+        else
+            echohl WarningMsg | echo 'directory '. s:GetETActionDirFromView(). 'is not found.' | echohl None
+        endif
     elseif s:IsETTemplate()
-        execute ':e '. s:GetPHPFileName(s:GetETActionPathFromTemplate())
+        if isdirectory(s:GetETActionDirFromTemplate())
+            execute ':e '. s:GetPHPFileName(s:GetETActionPathFromTemplate())
+        else
+            echohl WarningMsg | echo 'directory '. s:GetETActionDirFromTemplate(). 'is not found.' | echohl None
+        endif
     else
         return
     endif
@@ -185,11 +193,19 @@ endfunction
 
 function! s:ETView()
     if s:IsETAction()
-        execute ':e '. s:GetPHPFileName(s:GetETViewPathFromAction())
+        if isdirectory(s:GetETViewPathFromAction())
+            execute ':e '. s:GetPHPFileName(s:GetETViewPathFromAction())
+        else
+            echohl WarningMsg | echo 'directory '. s:GetETViewDirFromAction(). 'is not found.' | echohl None
+        endif
     elseif s:IsETView()
         return
     elseif s:IsETTemplate()
-        execute ':e '. s:GetPHPFileName(s:GetETViewPathFromTemplate())
+        if isdirectory(s:GetETViewPathFromTemplate())
+            execute ':e '. s:GetPHPFileName(s:GetETViewPathFromTemplate())
+        else
+            echohl WarningMsg | echo 'directory '. s:GetETViewDirFromTemplate(). 'is not found.' | echohl None
+        endif
     else
         return
     endif
@@ -197,9 +213,17 @@ endfunction
 
 function! s:ETTemplate()
     if s:IsETAction()
-        execute ':e '. s:GetETTemplatePathFromAction()
+        if isdirectory(s:GetETTemplateDirFromAction())
+            execute ':e '. s:GetETTemplatePathFromAction()
+        else
+            echohl WarningMsg | echo 'directory '. s:GetETTemplateDirFromAction(). 'is not found.' | echohl None
+        endif
     elseif s:IsETView()
-        execute ':e '. s:GetETTemplatePathFromView()
+        if isdirectory(s:GetETTemplateDirFromView())
+            execute ':e '. s:GetETTemplatePathFromView()
+        else
+            echohl WarningMsg | echo 'directory '. s:GetETTemplateDirFromView(). 'is not found.' | echohl None
+        endif
     elseif s:IsETTemplate()
         return
     else

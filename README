@@ -1,6 +1,13 @@
 PHP Ethna Action/View/Template Switch Plugin.
 
+command
 :ETA[ction]     open action file.
 :ETV[iew]       open view file.
 :ETT[emplate]   open template file.
+
+completion
+<C-X><C-A>      insert action file dir.
+<C-X><C-V>      insert view file dir.
+<C-X><C-T>      insert template file dir.
+
 
