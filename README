@@ -1,4 +1,8 @@
-PHP Ethna Action/View/Template Switch Plugin.
+PHP Ethna Action/View/Template File Switch Plugin.
+
+Ethna PHP Web Application Framework
+http://ethna.jp/
+http://translate.google.co.jp/translate?js=n&prev=_t&hl=ja&ie=UTF-8&layout=2&eotf=1&sl=ja&tl=en&u=http%3A%2F%2Fethna.jp%2F&act=url
 
 command
 :ETA[ction]     open action file.
