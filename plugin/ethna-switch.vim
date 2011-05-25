@@ -286,9 +286,9 @@ command! -nargs=0 ETAction   call <SID>ETAction()
 command! -nargs=0 ETView     call <SID>ETView()
 command! -nargs=0 ETTemplate call <SID>ETTemplate()
 
-cmap <C-X><C-A> <C-\>e<SID>InsertETActionDir()<CR>
-cmap <C-X><C-V> <C-\>e<SID>InsertETViewDir()<CR>
-cmap <C-X><C-T> <C-\>e<SID>InsertETTemplateDir()<CR>
+cnoremap <C-X><C-A> <C-\>e<SID>InsertETActionDir()<CR>
+cnoremap <C-X><C-V> <C-\>e<SID>InsertETViewDir()<CR>
+cnoremap <C-X><C-T> <C-\>e<SID>InsertETTemplateDir()<CR>
 
 " ---------------------------------------------------------------------
 let &cpo= s:keepcpo
